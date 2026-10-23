@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About · Bremorph</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Mohammed Bremoo, the maker of Bremorph: a free, open-source Mac app that converts, compresses and edits files from Finder.">
+<meta property="og:title" content="About Mohammed Bremoo, maker of Bremorph">
+<meta property="og:description" content="Drag a file, hold a key, drop it on a format. Free and open source for macOS, in English and Arabic.">
+<meta property="og:image" content="https://moha-bremoo.github.io/Bremorph/images/banner.png">
+<meta property="og:url" content="https://moha-bremoo.github.io/Bremorph/about.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://moha-bremoo.github.io/Bremorph/images/banner.png">
+<link rel="icon" href="images/icon.png">
+<link rel="apple-touch-icon" href="images/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one column of "sheets" on a graphite desk. The hero is a working wheel; every format is set like a file extension. */
+:root {
+  --bg: #111315;          /* graphite desk */
+  --surface: #1a1d20;     /* a sheet on the desk */
+  --raised: #23272b;
+  --line: #2f3439;
+  --fg: #eceee8;
+  --muted: #9aa097;
+  --faint: #6b7168;
+  --signal: #c9f23e;      /* the one accent: what you're about to act on */
+  --signal-press: #b0d92e;
+  --ink: #101211;         /* text on signal */
+  --accent-text: #c9f23e; /* accent used as text */
+  --fold: #8da92a;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --arabic: "IBM Plex Sans Arabic", "Geeza Pro", "Noto Sans Arabic", Tahoma, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+  --radius: 14px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eeefea; --surface: #f8f8f5; --raised: #ffffff; --line: #d9dbd3;
+    --fg: #15181a; --muted: #555b52; --faint: #80867c;
+    --accent-text: #475f00; --fold: #8da92a; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eeefea; --surface: #f8f8f5; --raised: #ffffff; --line: #d9dbd3;
+  --fg: #15181a; --muted: #555b52; --faint: #80867c;
+  --accent-text: #475f00; --fold: #8da92a; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+:lang(ar) body, html[lang="ar"] body { font-family: var(--arabic); }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 6px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--mono); }
+.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+html[lang="ar"] .eyebrow { letter-spacing: 0; text-transform: none; font-family: var(--arabic); font-size: 13px; }
+
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { font-family: var(--arabic); letter-spacing: 0; }
+h1 { font-size: clamp(2.6rem, 6.4vw, 4.9rem); line-height: .98; font-weight: 800; }
+h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.05; font-weight: 700; }
+h3 { font-size: 1.2rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+html[lang="ar"] h1 { line-height: 1.2; }
+html[lang="ar"] h2 { line-height: 1.3; }
+p { margin: 0; }
+.lede { font-size: 1.15rem; color: var(--muted); max-width: 34em; }
+
+/* Header */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.bar { display: flex; align-items: center; gap: 20px; height: 62px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.15rem/1 var(--display); }
+.brand svg { width: 30px; height: 30px; flex: none; }
+nav.links { display: flex; gap: 22px; margin-inline-start: 12px; }
+nav.links a { text-decoration: none; color: var(--muted); font-size: .95rem; }
+nav.links a:hover { color: var(--fg); }
+.bar .spacer { flex: 1; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.lang button { appearance: none; border: 0; background: transparent; color: var(--muted); font: 500 13px/1 var(--body); padding: 8px 11px; cursor: pointer; }
+.lang button[lang="ar"] { font-family: var(--arabic); }
+.lang button[aria-pressed="true"] { background: var(--raised); color: var(--fg); }
+
+.btn { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; font: 600 15px/1 var(--body); padding: 13px 18px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; transition: background .12s ease, transform .08s ease; white-space: nowrap; }
+html[lang="ar"] .btn { font-family: var(--arabic); }
+.btn:hover { background: var(--raised); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--signal); color: var(--ink); border-color: rgba(0,0,0,.15); }
+.btn.primary:hover { background: var(--signal-press); }
+.btn.small { padding: 9px 13px; font-size: 14px; }
+.btn svg { width: 17px; height: 17px; flex: none; }
+
+/* Hero */
+.hero { padding-block: 72px 56px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.hero .copy { display: grid; gap: 24px; min-width: 0; }
+.hero h1 .hl { color: var(--accent-text); }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--faint); font: 400 13px/1.4 var(--mono); }
+html[lang="ar"] .facts { font-family: var(--arabic); font-size: 14px; }
+.facts span { display: inline-flex; align-items: center; gap: 8px; }
+.facts span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--signal); }
+
+/* The demo */
+.demo { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: grid; gap: 18px; min-width: 0; }
+.demo-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.keys { display: flex; gap: 8px; flex-wrap: wrap; }
+.key { appearance: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--raised); color: var(--muted); font: 500 13px/1 var(--body); box-shadow: 0 2px 0 var(--line); }
+html[lang="ar"] .key { font-family: var(--arabic); }
+.key kbd { font: 600 12px/1 var(--mono); color: var(--fg); }
+.key[aria-pressed="true"] { background: var(--signal); color: var(--ink); border-color: rgba(0,0,0,.15); box-shadow: 0 2px 0 var(--fold); }
+.key[aria-pressed="true"] kbd { color: var(--ink); }
+.stage { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: center; }
+.file { width: 104px; display: grid; justify-items: center; gap: 10px; }
+.sheet { position: relative; width: 84px; height: 106px; }
+.sheet svg { width: 100%; height: 100%; overflow: visible; }
+.sheet .ext { position: absolute; left: 10px; bottom: 10px; font: 600 13px/1 var(--mono); direction: ltr; unicode-bidi: isolate; }
+.file .name { font: 500 12px/1.3 var(--mono); color: var(--muted); text-align: center; word-break: break-all; direction: ltr; unicode-bidi: isolate; }
+.sheet.morph { animation: morph .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes morph { 0% { transform: rotateY(0) scale(1); } 45% { transform: rotateY(90deg) scale(.96); } 100% { transform: rotateY(0) scale(1); } }
+.wheel { width: 100%; max-width: 360px; aspect-ratio: 1; margin-inline: auto; }
+.wheel svg { width: 100%; height: 100%; display: block; }
+.wheel .slice { cursor: pointer; }
+.wheel .slice path { fill: var(--wheel-slice); stroke: var(--wheel-line); stroke-width: 1; transition: fill .12s ease; }
+.wheel .slice text { fill: #eceee8; font: 600 15px var(--mono); pointer-events: none; }
+.wheel .slice text.word { font: 600 12.5px var(--body); }
+html[lang="ar"] .wheel .slice text.word { font-family: var(--arabic); font-size: 13.5px; }
+.wheel .slice:hover path, .wheel .slice:focus-visible path, .wheel .slice.on path { fill: var(--signal); }
+.wheel .slice:hover text, .wheel .slice.on text { fill: #101211; }
+.wheel .slice:focus { outline: none; }
+.wheel .rim { fill: #15181a; stroke: #3a4046; }
+.wheel .hub { fill: #1d2125; stroke: #3a4046; }
+.wheel .hub-title { fill: #eceee8; font: 700 15px var(--body); }
+html[lang="ar"] .wheel .hub-title { font-family: var(--arabic); }
+.wheel .hub-sub { fill: var(--signal); font: 600 11px var(--mono); }
+html[lang="ar"] .wheel .hub-sub { font-family: var(--arabic); font-size: 12px; }
+:root { --wheel-slice: #1f2327; --wheel-line: #343a40; }
+.result { min-height: 3.2em; font-size: 14px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 14px; }
+.result b { color: var(--fg); font-weight: 600; }
+.result .ok { color: var(--accent-text); font-family: var(--mono); font-size: 13px; }
+
+/* Sections */
+section { padding-block: 72px; border-top: 1px solid var(--line); }
+.section-head { display: grid; gap: 14px; margin-bottom: 40px; max-width: 40em; }
+
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: grid; gap: 10px; align-content: start; counter-increment: step; }
+.steps li::before { content: counter(step); font: 600 13px/1 var(--mono); color: var(--accent-text); }
+.steps p { color: var(--muted); font-size: 15px; }
+.steps kbd { font: 600 12px/1 var(--mono); padding: 3px 6px; border: 1px solid var(--line); border-radius: 5px; background: var(--raised); color: var(--fg); }
+
+figure { margin: 0; min-width: 0; }
+figure img { width: 100%; height: auto; }
+.hero-shot { margin-top: 40px; }
+.gallery { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 40px; }
+.g-side { display: grid; gap: 24px; }
+.g-side figure img { max-width: 360px; margin-inline: auto; }
+.caption { font-size: 14px; color: var(--faint); margin-top: 6px; text-align: center; }
+
+.features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.feature { background: var(--surface); padding: 26px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.feature .icon { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--raised); border: 1px solid var(--line); color: var(--accent-text); }
+.feature .icon svg { width: 18px; height: 18px; }
+.feature p { color: var(--muted); font-size: 15px; }
+.feature code { direction: ltr; unicode-bidi: isolate; display: inline-block; font: 500 12.5px var(--mono); color: var(--fg); background: var(--raised); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; word-break: break-all; }
+
+.formats { display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.frow { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px; padding: 16px 20px; background: var(--surface); border-top: 1px solid var(--line); align-items: baseline; }
+.frow:first-child { border-top: 0; }
+.frow h3 { font-size: 1rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 12.5px/1 var(--mono); padding: 6px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); direction: ltr; }
+.chip.helper { border-style: dashed; color: var(--muted); }
+.legend { margin-top: 14px; font-size: 14px; color: var(--faint); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.privacy { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.ledger { white-space: pre; font: 400 13.5px/1.9 var(--mono); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; color: var(--muted); direction: ltr; text-align: left; overflow-x: auto; }
+.ledger .k { color: var(--fg); }
+.ledger .v { color: var(--accent-text); }
+
+.get { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.card p { color: var(--muted); font-size: 15px; }
+.code { position: relative; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; font: 400 13px/1.8 var(--mono); overflow-x: auto; direction: ltr; text-align: left; white-space: pre; }
+.code .c { color: var(--faint); }
+.copy-btn { position: absolute; top: 8px; right: 8px; }
+.note { font-size: 14px; color: var(--faint); }
+.note code { font-family: var(--mono); font-size: 13px; color: var(--fg); }
+
+footer { border-top: 1px solid var(--line); padding-block: 36px 48px; color: var(--faint); font-size: 14px; }
+footer .wrap { display: flex; gap: 16px 28px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--fg); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-top: 48px; gap: 40px; }
+  nav.links { display: none; }
+  .features { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .gallery, .privacy, .get { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  .steps, .features { grid-template-columns: minmax(0, 1fr); }
+  .frow { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .stage { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .bar .btn.small { display: none; }
+  section { padding-block: 56px; }
+}
+
+/* About page */
+nav.links a[aria-current="page"] { color: var(--fg); }
+.about-hero { padding-block: 72px 56px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 40px; align-items: center; }
+.portrait { position: relative; width: 168px; height: 168px; flex: none; }
+.portrait .frame { width: 100%; height: 100%; border-radius: 30px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); display: grid; place-items: center; }
+.portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait .mono-mark { font: 800 56px/1 var(--display); color: var(--accent-text); letter-spacing: -0.03em; }
+.portrait::after { content: ""; position: absolute; top: -1px; inset-inline-end: -1px; width: 38px; height: 38px; background: linear-gradient(225deg, var(--bg) 50%, var(--fold) 50%); border-start-end-radius: 30px; border-end-start-radius: 8px; }
+html[dir="rtl"] .portrait::after { background: linear-gradient(135deg, var(--bg) 50%, var(--fold) 50%); }
+.about-hero .copy { display: grid; gap: 18px; min-width: 0; }
+.about-hero h1 { font-size: clamp(2.4rem, 5.6vw, 4.2rem); }
+.handle { font: 500 14px/1 var(--mono); color: var(--accent-text); direction: ltr; unicode-bidi: isolate; }
+html[dir="rtl"] .handle { text-align: right; }
+.two { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.prose { display: grid; gap: 16px; color: var(--muted); font-size: 1.05rem; max-width: 36em; }
+.prose b { color: var(--fg); font-weight: 600; }
+.spec { display: grid; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.spec div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 14px; padding: 14px 18px; background: var(--surface); border-top: 1px solid var(--line); font-size: 15px; }
+.spec div:first-child { border-top: 0; }
+.spec dt { color: var(--faint); font: 500 12.5px/1.6 var(--mono); }
+html[lang="ar"] .spec dt { font-family: var(--arabic); font-size: 13.5px; }
+.spec dd { margin: 0; color: var(--fg); }
+.links-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.link-card { text-decoration: none; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: grid; gap: 8px; transition: background .12s ease, border-color .12s ease; min-width: 0; }
+.link-card:hover { background: var(--raised); border-color: var(--faint); }
+.link-card .k { font: 600 12px/1 var(--mono); color: var(--accent-text); letter-spacing: .04em; }
+html[lang="ar"] .link-card .k { font-family: var(--arabic); font-size: 13px; letter-spacing: 0; }
+.link-card h3 { font-size: 1.15rem; }
+.link-card p { color: var(--muted); font-size: 14.5px; }
+.link-card .url { font: 400 12.5px/1.4 var(--mono); color: var(--faint); direction: ltr; unicode-bidi: isolate; word-break: break-all; }
+@media (max-width: 900px) { .two, .links-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 620px) { .about-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 48px; } .portrait { width: 120px; height: 120px; } .spec div { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="index.html" aria-label="Bremorph home">
+      <svg viewBox="0 0 1024 1024" aria-hidden="true"><rect x="40" y="40" width="944" height="944" rx="220" fill="#1a1d20" stroke="#3a4046" stroke-width="16"/><g transform="translate(512 512) scale(.8) translate(-518 -532)"><path d="M340,290 H560 L640,370 V500 H340 M340,500 H560 A137,137 0 0 1 560,774 H340 M340,250 V814" fill="none" stroke="#c9f23e" stroke-width="80" stroke-linejoin="miter"/><path d="M520,330 L600,410 H520 Z" fill="#8da92a"/></g></svg>
+      Bremorph
+    </a>
+    <nav class="links" aria-label="Pages">
+      <a href="index.html" data-i18n="nav.home">Bremorph</a>
+      <a href="index.html#features" data-i18n="nav.features">Features</a>
+      <a href="about.html" aria-current="page" data-i18n="nav.about">About</a>
+    </nav>
+    <span class="spacer"></span>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-ar" lang="ar" aria-pressed="false">عربي</button>
+    </div>
+    <a class="btn small primary" href="index.html#get" data-i18n="nav.get">Get Bremorph</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap about-hero">
+    <div class="portrait">
+      <div class="frame"><img src="https://github.com/Moha-Bremoo.png?size=336" width="168" height="168" alt="Mohammed Bremoo" data-i18n-alt="about.photo" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mono-mark',textContent:'MB'}))"></div>
+    </div>
+    <div class="copy">
+      <p class="eyebrow" data-i18n="about.eyebrow">About the maker</p>
+      <h1 data-i18n="about.name">Mohammed Bremoo</h1>
+      <p class="handle">@Moha-Bremoo</p>
+      <p class="lede" data-i18n="about.lede">I made Bremorph, a free Mac app that converts, compresses and edits files right from Finder.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap two">
+      <div class="section-head" style="margin:0">
+        <p class="eyebrow" data-i18n="about.why.k">The project</p>
+        <h2 data-i18n="about.why.h">One small app for everyday file chores.</h2>
+        <div class="prose">
+          <p data-i18n-html="about.why.p1">Bremorph lives in the menu bar. You drag a file, hold a key, and drop it on the format or tool you want. The new file lands next to the original.</p>
+          <p data-i18n-html="about.why.p2">Everything runs on your Mac. The app has no network code, so your files never get uploaded anywhere.</p>
+          <p data-i18n-html="about.why.p3">It's open source under the MIT license, and the whole interface works in <b>English and Arabic</b>, with a proper right-to-left layout.</p>
+        </div>
+      </div>
+      <dl class="spec">
+        <div><dt data-i18n="spec.built">Built with</dt><dd>Swift, SwiftUI, AppKit</dd></div>
+        <div><dt data-i18n="spec.runs">Runs on</dt><dd data-i18n="spec.runs.v">macOS 13 or later</dd></div>
+        <div><dt data-i18n="spec.actions">Actions</dt><dd data-i18n="spec.actions.v">95 conversions and tools</dd></div>
+        <div><dt data-i18n="spec.lang">Languages</dt><dd data-i18n="spec.lang.v">English, Arabic</dd></div>
+        <div><dt data-i18n="spec.license">License</dt><dd>MIT</dd></div>
+        <div><dt data-i18n="spec.version">Version</dt><dd>1.0.0</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="about.find.k">Find me</p>
+        <h2 data-i18n="about.find.h">Say hi, report a bug, or send an idea.</h2>
+      </div>
+      <div class="links-grid">
+        <a class="link-card" href="https://github.com/Moha-Bremoo">
+          <span class="k">GitHub</span>
+          <h3 data-i18n="link.profile">My profile</h3>
+          <p data-i18n="link.profile.p">Other projects and what I'm working on.</p>
+          <span class="url">github.com/Moha-Bremoo</span>
+        </a>
+        <a class="link-card" href="https://github.com/Moha-Bremoo/Bremorph">
+          <span class="k" data-i18n="link.code.k">Source</span>
+          <h3 data-i18n="link.code">Bremorph on GitHub</h3>
+          <p data-i18n="link.code.p">Read the code, star the repo, or send a pull request.</p>
+          <span class="url">github.com/Moha-Bremoo/Bremorph</span>
+        </a>
+        <a class="link-card" href="https://github.com/Moha-Bremoo/Bremorph/issues">
+          <span class="k" data-i18n="link.issue.k">Feedback</span>
+          <h3 data-i18n="link.issue">Open an issue</h3>
+          <p data-i18n="link.issue.p">Found a bug or missing a format? Tell me there.</p>
+          <span class="url">github.com/Moha-Bremoo/Bremorph/issues</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p data-i18n="foot.by">Made by Mohammed Bremoo. MIT license.</p>
+    <nav aria-label="Links">
+      <a href="index.html" data-i18n="nav.home">Bremorph</a>
+      <a href="https://github.com/Moha-Bremoo/Bremorph">GitHub</a>
+      <a href="https://github.com/Moha-Bremoo/Bremorph/releases" data-i18n="foot.releases">Releases</a>
+      <a href="https://github.com/Moha-Bremoo/Bremorph/issues" data-i18n="foot.issues">Report a problem</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const T = {
+    en: {
+      "title": "About · Bremorph",
+      "nav.home": "Bremorph", "nav.features": "Features", "nav.about": "About", "nav.get": "Get Bremorph",
+      "about.photo": "Mohammed Bremoo", "about.eyebrow": "About the maker", "about.name": "Mohammed Bremoo",
+      "about.lede": "I made Bremorph, a free Mac app that converts, compresses and edits files right from Finder.",
+      "about.why.k": "The project", "about.why.h": "One small app for everyday file chores.",
+      "about.why.p1": "Bremorph lives in the menu bar. You drag a file, hold a key, and drop it on the format or tool you want. The new file lands next to the original.",
+      "about.why.p2": "Everything runs on your Mac. The app has no network code, so your files never get uploaded anywhere.",
+      "about.why.p3": "It's open source under the MIT license, and the whole interface works in <b>English and Arabic</b>, with a proper right-to-left layout.",
+      "spec.built": "Built with", "spec.runs": "Runs on", "spec.runs.v": "macOS 13 or later", "spec.actions": "Actions", "spec.actions.v": "95 conversions and tools",
+      "spec.lang": "Languages", "spec.lang.v": "English, Arabic", "spec.license": "License", "spec.version": "Version",
+      "about.find.k": "Find me", "about.find.h": "Say hi, report a bug, or send an idea.",
+      "link.profile": "My profile", "link.profile.p": "Other projects and what I'm working on.",
+      "link.code.k": "Source", "link.code": "Bremorph on GitHub", "link.code.p": "Read the code, star the repo, or send a pull request.",
+      "link.issue.k": "Feedback", "link.issue": "Open an issue", "link.issue.p": "Found a bug or missing a format? Tell me there.",
+      "foot.by": "Made by Mohammed Bremoo. MIT license.", "foot.releases": "Releases", "foot.issues": "Report a problem"
+    },
+    ar: {
+      "title": "عن المطوّر · Bremorph",
+      "nav.home": "Bremorph", "nav.features": "المميزات", "nav.about": "عن المطوّر", "nav.get": "حمّل Bremorph",
+      "about.photo": "محمد بريمو", "about.eyebrow": "عن المطوّر", "about.name": "محمد بريمو",
+      "about.lede": "أنا اللي سوّيت Bremorph، تطبيق مجاني للماك يحوّل ملفاتك ويضغطها ويعدّلها وأنت في Finder.",
+      "about.why.k": "المشروع", "about.why.h": "تطبيق صغير لشغل الملفات اليومي.",
+      "about.why.p1": "Bremorph يجلس في شريط القوائم. تسحب الملف، تضغط زر، وتفلته على الصيغة أو الأداة اللي تبيها. والملف الجديد يطلع جنب الأصلي.",
+      "about.why.p2": "كل شي يشتغل على جهازك. التطبيق ما فيه أي كود للإنترنت، يعني ملفاتك ما تنرفع لأي مكان.",
+      "about.why.p3": "مفتوح المصدر برخصة MIT، والواجهة كلها تشتغل <b>بالعربي والإنجليزي</b>، والعربي من اليمين لليسار زي ما يلزم.",
+      "spec.built": "مبني بـ", "spec.runs": "يشتغل على", "spec.runs.v": "macOS 13 أو أحدث", "spec.actions": "الأوامر", "spec.actions.v": "95 تحويل وأداة",
+      "spec.lang": "اللغات", "spec.lang.v": "العربي، الإنجليزي", "spec.license": "الرخصة", "spec.version": "الإصدار",
+      "about.find.k": "تواصل معي", "about.find.h": "سلّم، بلّغ عن مشكلة، أو أرسل فكرة.",
+      "link.profile": "حسابي", "link.profile.p": "مشاريعي الثانية واللي أشتغل عليه الحين.",
+      "link.code.k": "الكود", "link.code": "Bremorph على GitHub", "link.code.p": "اقرأ الكود، حط نجمة للمشروع، أو أرسل تعديل.",
+      "link.issue.k": "ملاحظات", "link.issue": "افتح Issue", "link.issue.p": "لقيت مشكلة أو تبي صيغة ناقصة؟ قل لي هناك.",
+      "foot.by": "صنعه محمد بريمو. رخصة MIT.", "foot.releases": "الإصدارات", "foot.issues": "بلّغ عن مشكلة"
+    }
+  };
+  const $ = (id) => document.getElementById(id);
+  function applyLang(l) {
+    const root = document.documentElement;
+    root.lang = l; root.dir = l === "ar" ? "rtl" : "ltr";
+    document.title = T[l].title;
+    document.querySelectorAll("[data-i18n]").forEach((n) => { const v = T[l][n.dataset.i18n]; if (typeof v === "string") n.textContent = v; });
+    document.querySelectorAll("[data-i18n-html]").forEach((n) => { const v = T[l][n.dataset.i18nHtml]; if (typeof v === "string") n.innerHTML = v; });
+    document.querySelectorAll("[data-i18n-alt]").forEach((n) => { n.alt = T[l][n.dataset.i18nAlt]; });
+    $("lang-en").setAttribute("aria-pressed", String(l === "en"));
+    $("lang-ar").setAttribute("aria-pressed", String(l === "ar"));
+    try { localStorage.setItem("bremorph-lang", l); } catch (e) {}
+  }
+  $("lang-en").addEventListener("click", () => applyLang("en"));
+  $("lang-ar").addEventListener("click", () => applyLang("ar"));
+  let saved = null;
+  try { saved = localStorage.getItem("bremorph-lang"); } catch (e) {}
+  let start = "en";
+  if (location.hash === "#ar" || location.hash === "#en") start = location.hash.slice(1);
+  else if (saved === "ar" || saved === "en") start = saved;
+  else if ((navigator.language || "").toLowerCase().startsWith("ar")) start = "ar";
+  applyLang(start);
+})();
+</script>
+</body>
+</html>

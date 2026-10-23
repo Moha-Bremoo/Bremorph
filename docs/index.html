@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bremorph</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Convert, compress and edit files from Finder on your Mac. Drag a file, hold a key, drop it on a format. Free, open source, English and Arabic.">
+<meta property="og:title" content="Bremorph: convert files without leaving Finder">
+<meta property="og:description" content="Drag a file, hold a key, drop it on a format. Free and open source for macOS, in English and Arabic.">
+<meta property="og:image" content="https://moha-bremoo.github.io/Bremorph/images/banner.png">
+<meta property="og:url" content="https://moha-bremoo.github.io/Bremorph/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://moha-bremoo.github.io/Bremorph/images/banner.png">
+<link rel="icon" href="images/icon.png">
+<link rel="apple-touch-icon" href="images/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one column of "sheets" on a graphite desk. The hero is a working wheel; every format is set like a file extension. */
+:root {
+  --bg: #111315;          /* graphite desk */
+  --surface: #1a1d20;     /* a sheet on the desk */
+  --raised: #23272b;
+  --line: #2f3439;
+  --fg: #eceee8;
+  --muted: #9aa097;
+  --faint: #6b7168;
+  --signal: #c9f23e;      /* the one accent: what you're about to act on */
+  --signal-press: #b0d92e;
+  --ink: #101211;         /* text on signal */
+  --accent-text: #c9f23e; /* accent used as text */
+  --fold: #8da92a;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --arabic: "IBM Plex Sans Arabic", "Geeza Pro", "Noto Sans Arabic", Tahoma, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+  --radius: 14px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eeefea; --surface: #f8f8f5; --raised: #ffffff; --line: #d9dbd3;
+    --fg: #15181a; --muted: #555b52; --faint: #80867c;
+    --accent-text: #475f00; --fold: #8da92a; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eeefea; --surface: #f8f8f5; --raised: #ffffff; --line: #d9dbd3;
+  --fg: #15181a; --muted: #555b52; --faint: #80867c;
+  --accent-text: #475f00; --fold: #8da92a; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+:lang(ar) body, html[lang="ar"] body { font-family: var(--arabic); }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 6px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--mono); }
+.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+html[lang="ar"] .eyebrow { letter-spacing: 0; text-transform: none; font-family: var(--arabic); font-size: 13px; }
+
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { font-family: var(--arabic); letter-spacing: 0; }
+h1 { font-size: clamp(2.6rem, 6.4vw, 4.9rem); line-height: .98; font-weight: 800; }
+h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.05; font-weight: 700; }
+h3 { font-size: 1.2rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+html[lang="ar"] h1 { line-height: 1.2; }
+html[lang="ar"] h2 { line-height: 1.3; }
+p { margin: 0; }
+.lede { font-size: 1.15rem; color: var(--muted); max-width: 34em; }
+
+/* Header */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.bar { display: flex; align-items: center; gap: 20px; height: 62px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.15rem/1 var(--display); }
+.brand svg { width: 30px; height: 30px; flex: none; }
+nav.links { display: flex; gap: 22px; margin-inline-start: 12px; }
+nav.links a { text-decoration: none; color: var(--muted); font-size: .95rem; }
+nav.links a:hover { color: var(--fg); }
+.bar .spacer { flex: 1; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.lang button { appearance: none; border: 0; background: transparent; color: var(--muted); font: 500 13px/1 var(--body); padding: 8px 11px; cursor: pointer; }
+.lang button[lang="ar"] { font-family: var(--arabic); }
+.lang button[aria-pressed="true"] { background: var(--raised); color: var(--fg); }
+
+.btn { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; font: 600 15px/1 var(--body); padding: 13px 18px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; transition: background .12s ease, transform .08s ease; white-space: nowrap; }
+html[lang="ar"] .btn { font-family: var(--arabic); }
+.btn:hover { background: var(--raised); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--signal); color: var(--ink); border-color: rgba(0,0,0,.15); }
+.btn.primary:hover { background: var(--signal-press); }
+.btn.small { padding: 9px 13px; font-size: 14px; }
+.btn svg { width: 17px; height: 17px; flex: none; }
+
+/* Hero */
+.hero { padding-block: 72px 56px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.hero .copy { display: grid; gap: 24px; min-width: 0; }
+.hero h1 .hl { color: var(--accent-text); }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--faint); font: 400 13px/1.4 var(--mono); }
+html[lang="ar"] .facts { font-family: var(--arabic); font-size: 14px; }
+.facts span { display: inline-flex; align-items: center; gap: 8px; }
+.facts span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--signal); }
+
+/* The demo */
+.demo { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: grid; gap: 18px; min-width: 0; }
+.demo-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.keys { display: flex; gap: 8px; flex-wrap: wrap; }
+.key { appearance: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--raised); color: var(--muted); font: 500 13px/1 var(--body); box-shadow: 0 2px 0 var(--line); }
+html[lang="ar"] .key { font-family: var(--arabic); }
+.key kbd { font: 600 12px/1 var(--mono); color: var(--fg); }
+.key[aria-pressed="true"] { background: var(--signal); color: var(--ink); border-color: rgba(0,0,0,.15); box-shadow: 0 2px 0 var(--fold); }
+.key[aria-pressed="true"] kbd { color: var(--ink); }
+.stage { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: center; }
+.file { width: 104px; display: grid; justify-items: center; gap: 10px; }
+.sheet { position: relative; width: 84px; height: 106px; }
+.sheet svg { width: 100%; height: 100%; overflow: visible; }
+.sheet .ext { position: absolute; left: 10px; bottom: 10px; font: 600 13px/1 var(--mono); direction: ltr; unicode-bidi: isolate; }
+.file .name { font: 500 12px/1.3 var(--mono); color: var(--muted); text-align: center; word-break: break-all; direction: ltr; unicode-bidi: isolate; }
+.sheet.morph { animation: morph .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes morph { 0% { transform: rotateY(0) scale(1); } 45% { transform: rotateY(90deg) scale(.96); } 100% { transform: rotateY(0) scale(1); } }
+.wheel { width: 100%; max-width: 360px; aspect-ratio: 1; margin-inline: auto; }
+.wheel svg { width: 100%; height: 100%; display: block; }
+.wheel .slice { cursor: pointer; }
+.wheel .slice path { fill: var(--wheel-slice); stroke: var(--wheel-line); stroke-width: 1; transition: fill .12s ease; }
+.wheel .slice text { fill: #eceee8; font: 600 15px var(--mono); pointer-events: none; }
+.wheel .slice text.word { font: 600 12.5px var(--body); }
+html[lang="ar"] .wheel .slice text.word { font-family: var(--arabic); font-size: 13.5px; }
+.wheel .slice:hover path, .wheel .slice:focus-visible path, .wheel .slice.on path { fill: var(--signal); }
+.wheel .slice:hover text, .wheel .slice.on text { fill: #101211; }
+.wheel .slice:focus { outline: none; }
+.wheel .rim { fill: #15181a; stroke: #3a4046; }
+.wheel .hub { fill: #1d2125; stroke: #3a4046; }
+.wheel .hub-title { fill: #eceee8; font: 700 15px var(--body); }
+html[lang="ar"] .wheel .hub-title { font-family: var(--arabic); }
+.wheel .hub-sub { fill: var(--signal); font: 600 11px var(--mono); }
+html[lang="ar"] .wheel .hub-sub { font-family: var(--arabic); font-size: 12px; }
+:root { --wheel-slice: #1f2327; --wheel-line: #343a40; }
+.result { min-height: 3.2em; font-size: 14px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 14px; }
+.result b { color: var(--fg); font-weight: 600; }
+.result .ok { color: var(--accent-text); font-family: var(--mono); font-size: 13px; }
+
+/* Sections */
+section { padding-block: 72px; border-top: 1px solid var(--line); }
+.section-head { display: grid; gap: 14px; margin-bottom: 40px; max-width: 40em; }
+
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: grid; gap: 10px; align-content: start; counter-increment: step; }
+.steps li::before { content: counter(step); font: 600 13px/1 var(--mono); color: var(--accent-text); }
+.steps p { color: var(--muted); font-size: 15px; }
+.steps kbd { font: 600 12px/1 var(--mono); padding: 3px 6px; border: 1px solid var(--line); border-radius: 5px; background: var(--raised); color: var(--fg); }
+
+figure { margin: 0; min-width: 0; }
+figure img { width: 100%; height: auto; }
+.hero-shot { margin-top: 40px; }
+.gallery { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 40px; }
+.g-side { display: grid; gap: 24px; }
+.g-side figure img { max-width: 360px; margin-inline: auto; }
+.caption { font-size: 14px; color: var(--faint); margin-top: 6px; text-align: center; }
+
+.features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.feature { background: var(--surface); padding: 26px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.feature .icon { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--raised); border: 1px solid var(--line); color: var(--accent-text); }
+.feature .icon svg { width: 18px; height: 18px; }
+.feature p { color: var(--muted); font-size: 15px; }
+.feature code { direction: ltr; unicode-bidi: isolate; display: inline-block; font: 500 12.5px var(--mono); color: var(--fg); background: var(--raised); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; word-break: break-all; }
+
+.formats { display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.frow { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px; padding: 16px 20px; background: var(--surface); border-top: 1px solid var(--line); align-items: baseline; }
+.frow:first-child { border-top: 0; }
+.frow h3 { font-size: 1rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 12.5px/1 var(--mono); padding: 6px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); direction: ltr; }
+.chip.helper { border-style: dashed; color: var(--muted); }
+.legend { margin-top: 14px; font-size: 14px; color: var(--faint); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.privacy { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.ledger { white-space: pre; font: 400 13.5px/1.9 var(--mono); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; color: var(--muted); direction: ltr; text-align: left; overflow-x: auto; }
+.ledger .k { color: var(--fg); }
+.ledger .v { color: var(--accent-text); }
+
+.get { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.card p { color: var(--muted); font-size: 15px; }
+.code { position: relative; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; font: 400 13px/1.8 var(--mono); overflow-x: auto; direction: ltr; text-align: left; white-space: pre; }
+.code .c { color: var(--faint); }
+.copy-btn { position: absolute; top: 8px; right: 8px; }
+.note { font-size: 14px; color: var(--faint); }
+.note code { font-family: var(--mono); font-size: 13px; color: var(--fg); }
+
+footer { border-top: 1px solid var(--line); padding-block: 36px 48px; color: var(--faint); font-size: 14px; }
+footer .wrap { display: flex; gap: 16px 28px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--fg); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-top: 48px; gap: 40px; }
+  nav.links { display: none; }
+  .features { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .gallery, .privacy, .get { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  .steps, .features { grid-template-columns: minmax(0, 1fr); }
+  .frow { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .stage { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .bar .btn.small { display: none; }
+  section { padding-block: 56px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#top" aria-label="Bremorph">
+      <svg viewBox="0 0 1024 1024" aria-hidden="true"><rect x="40" y="40" width="944" height="944" rx="220" fill="#1a1d20" stroke="#3a4046" stroke-width="16"/><g transform="translate(512 512) scale(.8) translate(-518 -532)"><path d="M340,290 H560 L640,370 V500 H340 M340,500 H560 A137,137 0 0 1 560,774 H340 M340,250 V814" fill="none" stroke="#c9f23e" stroke-width="80" stroke-linejoin="miter"/><path d="M520,330 L600,410 H520 Z" fill="#8da92a"/></g></svg>
+      Bremorph
+    </a>
+    <nav class="links" aria-label="Sections">
+      <a href="#how" data-i18n="nav.how">How it works</a>
+      <a href="#features" data-i18n="nav.features">Features</a>
+      <a href="#formats" data-i18n="nav.formats">Formats</a>
+      <a href="#privacy" data-i18n="nav.privacy">Privacy</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+    </nav>
+    <span class="spacer"></span>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-ar" lang="ar" aria-pressed="false">عربي</button>
+    </div>
+    <a class="btn small primary" href="#get" data-i18n="nav.get">Get Bremorph</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="copy">
+      <p class="eyebrow" data-i18n="hero.eyebrow">A file converter for macOS</p>
+      <h1 data-i18n-html="hero.title">Convert files without leaving <span class="hl">Finder</span>.</h1>
+      <p class="lede" data-i18n="hero.lede">Start dragging a file, hold a key, and drop it on the format you want. Bremorph saves the result next to the original. Nothing is uploaded.</p>
+      <div class="ctas">
+        <a class="btn primary" href="https://github.com/Moha-Bremoo/Bremorph/releases/latest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
+          <span data-i18n="cta.download">Download for Mac</span>
+        </a>
+        <a class="btn" href="https://github.com/Moha-Bremoo/Bremorph">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+          <span data-i18n="cta.github">Source on GitHub</span>
+        </a>
+      </div>
+      <p class="facts"><span data-i18n="facts.free">Free and open source</span><span data-i18n="facts.mac">macOS 13 or later</span><span data-i18n="facts.lang">English and Arabic</span></p>
+    </div>
+
+    <div class="demo" aria-label="Interactive example of the Bremorph wheel">
+      <div class="demo-head">
+        <p class="eyebrow" data-i18n="demo.label">Try the wheel</p>
+        <div class="keys" role="group" aria-label="Wheel">
+          <button type="button" class="key" id="key-convert" data-mode="convert" aria-pressed="true"><kbd>⇧</kbd><span data-i18n="mode.convert">Convert</span></button>
+          <button type="button" class="key" id="key-tools" data-mode="tools" aria-pressed="false"><kbd>⌘</kbd><span data-i18n="mode.tools">Tools</span></button>
+          <button type="button" class="key" id="key-actions" data-mode="actions" aria-pressed="false"><kbd>⌃</kbd><span data-i18n="mode.actions">Actions</span></button>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="file">
+          <div class="sheet" id="sheet">
+            <svg viewBox="0 0 84 106" aria-hidden="true">
+              <path id="sheet-body" d="M7 1 H60 L83 24 V99 Q83 105 77 105 H7 Q1 105 1 99 V7 Q1 1 7 1 Z" fill="var(--raised)" stroke="var(--line)" stroke-width="1.5"/>
+              <path id="sheet-flap" d="M60 1 V24 H83 Z" fill="var(--line)"/>
+            </svg>
+            <span class="ext" id="sheet-ext">.heic</span>
+          </div>
+          <span class="name" id="file-name">IMG_2048.heic</span>
+        </div>
+        <div class="wheel" id="wheel"></div>
+      </div>
+      <p class="result" id="result" aria-live="polite" data-i18n="demo.hint">Pick a key, then click a slice. On your Mac you'd drop the file on it.</p>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="how.eyebrow">How it works</p>
+        <h2 data-i18n="how.title">Three moves, and you never open the app.</h2>
+      </div>
+      <ol class="steps">
+        <li><h3 data-i18n="how.1.t">Start dragging a file</h3><p data-i18n="how.1.p">Any file in Finder or on your desktop. Several files at once works too.</p></li>
+        <li><h3 data-i18n="how.2.t">Hold a key</h3><p data-i18n-html="how.2.p"><kbd>⇧</kbd> shows formats, <kbd>⌘</kbd> shows tools, <kbd>⌃</kbd> shows actions like AirDrop or ZIP. A wheel opens under your pointer.</p></li>
+        <li><h3 data-i18n="how.3.t">Drop it on a slice</h3><p data-i18n="how.3.p">The new file appears next to the original. Drop it in the middle if you change your mind.</p></li>
+      </ol>
+      <figure class="hero-shot">
+        <img src="images/main-window.webp" data-src-ar="images/main-window-ar.webp" width="2600" height="1618" alt="The Bremorph window with three files and their formats and tools" data-i18n-alt="shot.main" loading="lazy">
+        <figcaption class="caption" data-i18n="shot.main.cap">Prefer a window? Drop files on it to see every format and tool for them at once.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="feat.eyebrow">Beyond converting</p>
+        <h2 data-i18n="feat.title">The small jobs you used to open a website for.</h2>
+        <p class="lede" data-i18n="feat.lede">95 actions in all. These are the ones people reach for most.</p>
+      </div>
+      <div class="features">
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 2v14a2 2 0 0 0 2 2h14M18 22V8a2 2 0 0 0-2-2H2"/></svg></span><h3 data-i18n="f1.t">Crop, mark up, hide</h3><p data-i18n="f1.p">Crop to common ratios, draw arrows and text, and cover faces or account numbers before you share a screenshot.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 7a4 4 0 1 1 8 0M4 21l2-12h12l2 12Z"/></svg></span><h3 data-i18n="f2.t">Fit to an exact size</h3><p data-i18n="f2.p">A form wants an image under 2 MB? Type the size and Bremorph keeps the best quality that fits. Works for video and PDFs too.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="9" rx="1"/><rect x="3" y="15" width="7" height="6" rx="1"/><rect x="14" y="15" width="7" height="6" rx="1"/></svg></span><h3 data-i18n="f3.t">PDF pages</h3><p data-i18n="f3.p">Reorder, rotate, delete and merge pages, or pull out only the ones you need.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><path d="m4 4 16 16"/></svg></span><h3 data-i18n="f4.t">Metadata and location</h3><p data-i18n="f4.p">Edit titles, dates and keywords, or strip GPS location from photos before you post them. Photos aren't re-encoded.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m5 8 4 4-4 4M12 17h7"/></svg></span><h3 data-i18n="f5.t">From the terminal</h3><p data-i18n-html="f5.p">Every action also runs from the command line, for example <code>Bremorph --run vidWEBM clip.mp4</code>.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 5h9M8.5 3v2M6 5c.5 3 3 6 6 7M11 5c-.8 3.5-3.5 6.5-7 8M13 21l4-9 4 9M14.5 18h5"/></svg></span><h3 data-i18n="f6.t">English and Arabic</h3><p data-i18n="f6.p">The whole app is translated, with a right-to-left layout in Arabic and correct Arabic plurals.</p></article>
+      </div>
+      <div class="gallery">
+        <figure class="g-editor">
+          <img src="images/editor.webp" data-src-ar="images/editor-ar.webp" width="2200" height="1614" alt="The Crop & Edit window" data-i18n-alt="shot.editor" loading="lazy">
+          <figcaption class="caption" data-i18n="shot.editor.cap">Crop & Edit, with Markup and Hide in the same window.</figcaption>
+        </figure>
+        <div class="g-side">
+          <figure>
+            <img src="images/wheel.webp" data-src-ar="images/wheel-ar.webp" width="1200" height="1200" alt="The Tools wheel" data-i18n-alt="shot.wheel" loading="lazy">
+            <figcaption class="caption" data-i18n="shot.wheel.cap">The Tools wheel, opened by holding Command while dragging a photo.</figcaption>
+          </figure>
+          <figure>
+            <img src="images/settings.webp" data-src-ar="images/settings-ar.webp" width="1230" height="1226" alt="Bremorph settings" data-i18n-alt="shot.settings" loading="lazy">
+            <figcaption class="caption" data-i18n="shot.settings.cap">Settings: where results go, the keys, and the language.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="formats">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="fmt.eyebrow">Formats</p>
+        <h2 data-i18n="fmt.title">What goes in, what comes out.</h2>
+      </div>
+      <div class="formats" id="format-list"></div>
+      <p class="legend"><span class="chip helper">.mkv</span><span data-i18n="fmt.legend">Dashed formats need ffmpeg or LibreOffice, both free. Bremorph finds them automatically.</span></p>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap privacy">
+      <div class="section-head" style="margin:0">
+        <p class="eyebrow" data-i18n="priv.eyebrow">Privacy</p>
+        <h2 data-i18n="priv.title">Your files stay on your Mac.</h2>
+        <p class="lede" data-i18n="priv.lede">Bremorph has no network code. It converts with macOS's own frameworks, and with ffmpeg or LibreOffice if you install them, which run locally too. There's no account and no upload limit.</p>
+      </div>
+      <div class="ledger" aria-label="What Bremorph does with a file">
+        <div><span class="k">read</span>   ~/Desktop/IMG_2048.heic</div>
+        <div><span class="k">write</span>  ~/Desktop/IMG_2048.png</div>
+        <div><span class="k">upload</span> <span class="v">none</span></div>
+        <div><span class="k">account</span> <span class="v">none</span></div>
+        <div><span class="k">network</span> <span class="v">none</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="get">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="get.eyebrow">Get Bremorph</p>
+        <h2 data-i18n="get.title">Free, for macOS 13 Ventura and later.</h2>
+      </div>
+      <div class="get">
+        <div class="card">
+          <h3 data-i18n="get.dl.t">Download</h3>
+          <p data-i18n="get.dl.p">Unzip it and move Bremorph to Applications. It lives in the menu bar, so the wheel works whenever it's running.</p>
+          <p><a class="btn primary" href="https://github.com/Moha-Bremoo/Bremorph/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg><span data-i18n="cta.download">Download for Mac</span></a></p>
+          <p class="note" data-i18n="get.dl.note">The app isn't notarized by Apple yet, so the first time you open it macOS says it can't check it. Go to System Settings → Privacy & Security and click Open Anyway.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="get.src.t">Build it yourself</h3>
+          <p data-i18n="get.src.p">You need Apple's Command Line Tools. Xcode itself isn't required.</p>
+          <div class="code" id="build-code"><button type="button" class="btn small copy-btn" id="copy-build" data-i18n="get.copy">Copy</button><span class="c"># xcode-select --install</span>
+git clone https://github.com/Moha-Bremoo/Bremorph.git
+cd Bremorph
+./build.command</div>
+          <p class="note" data-i18n-html="get.src.note">For MKV, WebM, MP3 and more: <code>brew install ffmpeg</code></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p data-i18n="foot.by">Made by Mohammed Bremoo. MIT license.</p>
+    <nav aria-label="Links">
+      <a href="https://github.com/Moha-Bremoo/Bremorph">GitHub</a>
+      <a href="https://github.com/Moha-Bremoo/Bremorph/releases" data-i18n="foot.releases">Releases</a>
+      <a href="https://github.com/Moha-Bremoo/Bremorph/issues" data-i18n="foot.issues">Report a problem</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const T = {
+    en: {
+      "nav.how": "How it works", "nav.features": "Features", "nav.formats": "Formats", "nav.privacy": "Privacy", "nav.about": "About", "nav.get": "Get Bremorph",
+      "hero.eyebrow": "A file converter for macOS",
+      "hero.title": 'Convert files without leaving <span class="hl">Finder</span>.',
+      "hero.lede": "Start dragging a file, hold a key, and drop it on the format you want. Bremorph saves the result next to the original. Nothing is uploaded.",
+      "cta.download": "Download for Mac", "cta.github": "Source on GitHub",
+      "facts.free": "Free and open source", "facts.mac": "macOS 13 or later", "facts.lang": "English and Arabic",
+      "demo.label": "Try the wheel", "mode.convert": "Convert", "mode.tools": "Tools", "mode.actions": "Actions",
+      "demo.hint": "Pick a key, then click a slice. On your Mac you'd drop the file on it.",
+      "demo.saved": (n, o) => `Saved <b>${n}</b> next to ${o}.`,
+      "demo.tool": (t) => `<b>${t}</b> opens with this file. The result is saved next to the original.`,
+      "demo.action": (t) => `<b>${t}</b> runs on the file right away.`,
+      "hub.files": "1 file",
+      "how.eyebrow": "How it works", "how.title": "Three moves, and you never open the app.",
+      "how.1.t": "Start dragging a file", "how.1.p": "Any file in Finder or on your desktop. Several files at once works too.",
+      "how.2.t": "Hold a key", "how.2.p": "<kbd>⇧</kbd> shows formats, <kbd>⌘</kbd> shows tools, <kbd>⌃</kbd> shows actions like AirDrop or ZIP. A wheel opens under your pointer.",
+      "how.3.t": "Drop it on a slice", "how.3.p": "The new file appears next to the original. Drop it in the middle if you change your mind.",
+      "shot.main.cap": "Prefer a window? Drop files on it to see every format and tool for them at once.",
+      "shot.wheel.cap": "The Tools wheel, opened by holding Command while dragging a photo.",
+      "shot.editor.cap": "Crop & Edit, with Markup and Hide in the same window.",
+      "shot.settings.cap": "Settings: where results go, the keys, and the language.",
+      "shot.main": "The Bremorph window with three files and their formats and tools",
+      "shot.wheel": "The Tools wheel", "shot.editor": "The Crop & Edit window", "shot.settings": "Bremorph settings",
+      "feat.eyebrow": "Beyond converting", "feat.title": "The small jobs you used to open a website for.", "feat.lede": "95 actions in all. These are the ones people reach for most.",
+      "f1.t": "Crop, mark up, hide", "f1.p": "Crop to common ratios, draw arrows and text, and cover faces or account numbers before you share a screenshot.",
+      "f2.t": "Fit to an exact size", "f2.p": "A form wants an image under 2 MB? Type the size and Bremorph keeps the best quality that fits. Works for video and PDFs too.",
+      "f3.t": "PDF pages", "f3.p": "Reorder, rotate, delete and merge pages, or pull out only the ones you need.",
+      "f4.t": "Metadata and location", "f4.p": "Edit titles, dates and keywords, or strip GPS location from photos before you post them. Photos aren't re-encoded.",
+      "f5.t": "From the terminal", "f5.p": "Every action also runs from the command line, for example <code>Bremorph --run vidWEBM clip.mp4</code>.",
+      "f6.t": "English and Arabic", "f6.p": "The whole app is translated, with a right-to-left layout in Arabic and correct Arabic plurals.",
+      "fmt.eyebrow": "Formats", "fmt.title": "What goes in, what comes out.",
+      "fmt.legend": "Dashed formats need ffmpeg or LibreOffice, both free. Bremorph finds them automatically.",
+      "priv.eyebrow": "Privacy", "priv.title": "Your files stay on your Mac.",
+      "priv.lede": "Bremorph has no network code. It converts with macOS's own frameworks, and with ffmpeg or LibreOffice if you install them, which run locally too. There's no account and no upload limit.",
+      "get.eyebrow": "Get Bremorph", "get.title": "Free, for macOS 13 Ventura and later.",
+      "get.dl.t": "Download", "get.dl.p": "Unzip it and move Bremorph to Applications. It lives in the menu bar, so the wheel works whenever it's running.",
+      "get.dl.note": "The app isn't notarized by Apple yet, so the first time you open it macOS says it can't check it. Go to System Settings → Privacy & Security and click Open Anyway.",
+      "get.src.t": "Build it yourself", "get.src.p": "You need Apple's Command Line Tools. Xcode itself isn't required.",
+      "get.src.note": "For MKV, WebM, MP3 and more: <code>brew install ffmpeg</code>",
+      "get.copy": "Copy", "get.copied": "Copied",
+      "foot.by": "Made by Mohammed Bremoo. MIT license.", "foot.releases": "Releases", "foot.issues": "Report a problem",
+      kinds: { img: "Images", vid: "Video", aud: "Audio", pdf: "PDF", doc: "Documents", sl: "Slides", sh: "Spreadsheets", sub: "Subtitles", arc: "Archives" },
+      tools: ["Crop & Edit", "Compress", "Fit to Size", "Resize", "Remove Metadata", "Read QR Code", "Combine into PDF", "Edit Metadata"],
+      actions: ["AirDrop", "Copy", "Move To…", "Copy Path", "Terminal", "Float", "ZIP", "Open in Bremorph"]
+    },
+    ar: {
+      "nav.how": "كيف يشتغل", "nav.features": "المميزات", "nav.formats": "الصيغ", "nav.privacy": "الخصوصية", "nav.about": "عن المطوّر", "nav.get": "حمّل Bremorph",
+      "hero.eyebrow": "محوّل ملفات للماك",
+      "hero.title": 'حوّل ملفاتك وأنت في <span class="hl">Finder</span>.',
+      "hero.lede": "اسحب الملف، اضغط زر، وأفلته على الصيغة اللي تحتاجها. Bremorph يحفظ الملف الجديد جنب الأصلي، وما يرفع أي شيء على النت.",
+      "cta.download": "حمّله للماك", "cta.github": "الكود على GitHub",
+      "facts.free": "مجاني ومفتوح المصدر", "facts.mac": "macOS 13 وأحدث", "facts.lang": "عربي وإنجليزي",
+      "demo.label": "جرّب العجلة", "mode.convert": "تحويل", "mode.tools": "أدوات", "mode.actions": "إجراءات",
+      "demo.hint": "اختر زر، وبعدها اضغط على أي قسم. على جهازك راح تفلت الملف عليه.",
+      "demo.saved": (n, o) => `انحفظ <b>${n}</b> جنب ${o}.`,
+      "demo.tool": (t) => `يفتح لك <b>${t}</b> على الملف، والنتيجة تنحفظ جنب الأصلي.`,
+      "demo.action": (t) => `ينفّذ <b>${t}</b> على الملف على طول.`,
+      "hub.files": "ملف واحد",
+      "how.eyebrow": "كيف يشتغل", "how.title": "ثلاث خطوات، وما تحتاج تفتح التطبيق أصلًا.",
+      "how.1.t": "اسحب الملف", "how.1.p": "أي ملف في Finder أو على سطح المكتب. وتقدر تسحب أكثر من ملف مرة وحدة.",
+      "how.2.t": "اضغط زر", "how.2.p": "<kbd>⇧</kbd> للصيغ، و<kbd>⌘</kbd> للأدوات، و<kbd>⌃</kbd> للإجراءات مثل AirDrop وZIP. العجلة تطلع لك تحت المؤشر.",
+      "how.3.t": "أفلته على القسم", "how.3.p": "الملف الجديد يطلع جنب الأصلي. ولو غيّرت رأيك، أفلته في النص.",
+      "shot.main.cap": "تحب النوافذ؟ اسحب ملفاتك للنافذة وتشوف كل الصيغ والأدوات مرة وحدة.",
+      "shot.wheel.cap": "عجلة الأدوات، تطلع لما تضغط Command وأنت تسحب صورة.",
+      "shot.editor.cap": "القص والتحرير، ومعه الكتابة على الصورة والإخفاء في نفس النافذة.",
+      "shot.settings.cap": "الإعدادات: وين تنحفظ الملفات، والأزرار، واللغة.",
+      "shot.main": "نافذة Bremorph بالعربي مع ثلاث ملفات وصيغها وأدواتها",
+      "shot.wheel": "عجلة الأدوات بالعربي", "shot.editor": "نافذة القص والتحرير", "shot.settings": "إعدادات Bremorph",
+      "feat.eyebrow": "أكثر من مجرد تحويل", "feat.title": "الشغلات الصغيرة اللي كنت تدور لها موقع.", "feat.lede": "فيه 95 إجراء، وهذي أكثرها استخدامًا.",
+      "f1.t": "قص وكتابة وإخفاء", "f1.p": "قص الصورة بالمقاس اللي تحتاجه، ارسم أسهم واكتب نص، وغطّ الوجوه وأرقام الحسابات قبل ما تشارك لقطة الشاشة.",
+      "f2.t": "حجم محدد بالضبط", "f2.p": "نموذج يطلب صورة أقل من 2 ميغا؟ اكتب الحجم، وBremorph يعطيك أحسن جودة تناسبه. وحتى مع الفيديو وملفات PDF.",
+      "f3.t": "صفحات PDF", "f3.p": "رتّب الصفحات، دوّرها، احذفها أو ادمجها، أو طلّع بس الصفحات اللي تحتاجها.",
+      "f4.t": "البيانات والموقع", "f4.p": "عدّل العنوان والتاريخ والكلمات المفتاحية، أو امسح موقع GPS من صورك قبل ما تنشرها، بدون ما تتأثر جودتها.",
+      "f5.t": "من الطرفية", "f5.p": "كل إجراء تقدر تشغّله من سطر الأوامر، مثلًا <code>Bremorph --run vidWEBM clip.mp4</code>.",
+      "f6.t": "عربي وإنجليزي", "f6.p": "التطبيق كله مترجم، والواجهة بالعربي من اليمين لليسار.",
+      "fmt.eyebrow": "الصيغ", "fmt.title": "اللي يدخل واللي يطلع.",
+      "fmt.legend": "الصيغ اللي إطارها متقطع تحتاج ffmpeg أو LibreOffice، وكلهم مجانيين. وBremorph يلاقيهم تلقائيًا.",
+      "priv.eyebrow": "الخصوصية", "priv.title": "ملفاتك ما تطلع من جهازك.",
+      "priv.lede": "Bremorph ما فيه أي كود يتصل بالنت. يحوّل بأدوات الماك نفسها، وبـ ffmpeg أو LibreOffice لو ثبّتهم، وهم كمان يشتغلون على جهازك. لا حساب ولا حد للرفع.",
+      "get.eyebrow": "حمّل Bremorph", "get.title": "مجاني، لـ macOS 13 Ventura وأحدث.",
+      "get.dl.t": "تحميل", "get.dl.p": "فك الضغط وانقل Bremorph لمجلد التطبيقات. يشتغل من شريط القوائم، فالعجلة جاهزة طول ما هو شغّال.",
+      "get.dl.note": "التطبيق مو موثّق من Apple حاليًا، فأول مرة تفتحه بيقول لك macOS إنه ما يقدر يتحقق منه. روح لإعدادات النظام ← الخصوصية والأمان، واضغط «فتح على أي حال».",
+      "get.src.t": "ابنه بنفسك", "get.src.p": "تحتاج أدوات سطر الأوامر من Apple بس، وما تحتاج Xcode.",
+      "get.src.note": "عشان MKV وWebM وMP3 وغيرها: <code>brew install ffmpeg</code>",
+      "get.copy": "نسخ", "get.copied": "تم النسخ",
+      "foot.by": "من تطوير محمد بريمو. برخصة MIT.", "foot.releases": "الإصدارات", "foot.issues": "بلّغ عن مشكلة",
+      kinds: { img: "الصور", vid: "الفيديو", aud: "الصوت", pdf: "PDF", doc: "المستندات", sl: "العروض", sh: "الجداول", sub: "الترجمات", arc: "الأرشيفات" },
+      tools: ["قص وتحرير", "ضغط", "ملاءمة الحجم", "تغيير الأبعاد", "إزالة البيانات الوصفية", "قراءة رمز QR", "دمج في PDF", "تحرير البيانات الوصفية"],
+      actions: ["AirDrop", "نسخ", "نقل إلى…", "نسخ المسار", "الطرفية", "تثبيت عائم", "ZIP", "فتح في Bremorph"]
+    }
+  };
+
+  // Formats: [ext, needsHelper]
+  const FORMATS = [
+    ["img", [["jpeg"], ["png"], ["heic"], ["webp"], ["avif"], ["tiff"], ["gif"], ["bmp"], ["pdf"]]],
+    ["vid", [["mp4"], ["mov"], ["m4v"], ["gif"], ["m4a"], ["mkv", 1], ["webm", 1], ["avi", 1], ["wmv", 1], ["mp3", 1]]],
+    ["aud", [["m4a"], ["wav"], ["aiff"], ["caf"], ["flac"], ["mp3", 1], ["ogg", 1], ["opus", 1], ["wma", 1]]],
+    ["pdf", [["docx"], ["epub"], ["md"], ["txt"], ["png"], ["jpeg"], ["pages", 1], ["pptx", 1], ["xlsx", 1]]],
+    ["doc", [["pdf"], ["docx"], ["md"], ["epub"], ["rtf"], ["txt"], ["html"], ["odt"], ["pages", 1]]],
+    ["sl", [["pdf", 1], ["pptx", 1], ["png", 1], ["jpeg", 1]]],
+    ["sh", [["xlsx", 1], ["ods", 1], ["csv", 1], ["tsv", 1], ["pdf", 1]]],
+    ["sub", [["srt"], ["vtt"], ["txt"]]],
+    ["arc", [["zip"], ["tar.gz"], ["unzip"], ["rar", 0], ["7z", 0]]]
+  ];
+  const CONVERT = ["JPEG", "PNG", "HEIC", "WebP", "AVIF", "TIFF", "GIF", "PDF"];
+  const EXT = { JPEG: "jpg", PNG: "png", HEIC: "heic", WebP: "webp", AVIF: "avif", TIFF: "tiff", GIF: "gif", PDF: "pdf" };
+
+  let lang = "en", mode = "convert", current = "heic", lit = -1;
+  const $ = (id) => document.getElementById(id);
+  const svgNS = "http://www.w3.org/2000/svg";
+
+  function el(tag, attrs, parent) {
+    const n = document.createElementNS(svgNS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  function wheelItems() {
+    if (mode === "convert") return CONVERT.map((t) => ({ label: t, big: true }));
+    return T[lang][mode].map((t) => ({ label: t, big: false }));
+  }
+
+  function drawWheel() {
+    const host = $("wheel");
+    host.textContent = "";
+    const S = 360, c = S / 2, R = 172, r = 62;
+    const svg = el("svg", { viewBox: `0 0 ${S} ${S}`, role: "listbox", "aria-label": T[lang]["mode." + mode] }, host);
+    el("circle", { cx: c, cy: c, r: R + 6, class: "rim" }, svg);
+    const items = wheelItems(), n = items.length, step = (Math.PI * 2) / n, gap = 0.012;
+    items.forEach((it, i) => {
+      const a0 = -Math.PI / 2 + i * step - step / 2 + gap, a1 = a0 + step - gap * 2;
+      const p = (rad, a) => [c + rad * Math.cos(a), c + rad * Math.sin(a)];
+      const [x0, y0] = p(R, a0), [x1, y1] = p(R, a1), [x2, y2] = p(r + 6, a1), [x3, y3] = p(r + 6, a0);
+      const g = el("g", { class: "slice" + (i === lit ? " on" : ""), tabindex: "0", role: "option", "aria-label": it.label }, svg);
+      el("path", { d: `M${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1} L${x2},${y2} A${r + 6},${r + 6} 0 0 0 ${x3},${y3} Z` }, g);
+      const mid = a0 + (a1 - a0) / 2, [lx, ly] = p((R + r) / 2 + 4, mid);
+      const words = it.big ? [it.label] : wrap(it.label);
+      words.forEach((w, k) => {
+        const t = el("text", { x: lx, y: ly + (k - (words.length - 1) / 2) * 15 + 5, "text-anchor": "middle", class: it.big ? "" : "word" }, g);
+        t.textContent = w;
+      });
+      const pick = () => choose(i, it.label);
+      g.addEventListener("click", pick);
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+    });
+    el("circle", { cx: c, cy: c, r: r, class: "hub" }, svg);
+    const t1 = el("text", { x: c, y: c + 2, "text-anchor": "middle", class: "hub-title" }, svg);
+    t1.textContent = T[lang]["mode." + mode];
+    const t2 = el("text", { x: c, y: c + 20, "text-anchor": "middle", class: "hub-sub" }, svg);
+    t2.textContent = T[lang]["hub.files"];
+    [0, 1, 2].forEach((k) => {
+      const on = ["convert", "tools", "actions"][k] === mode;
+      el("rect", { x: c - 14 + k * 11 - (on ? 3 : 0), y: c + 32, width: on ? 10 : 4, height: 4, rx: 2, fill: on ? "#c9f23e" : "#4a5056" }, svg);
+    });
+  }
+
+  function wrap(label) {
+    const parts = label.split(" ");
+    if (parts.length < 2 || label.length < 10) return [label];
+    const half = Math.ceil(parts.length / 2);
+    return [parts.slice(0, half).join(" "), parts.slice(half).join(" ")];
+  }
+
+  function choose(i, label) {
+    lit = i;
+    drawWheel();
+    const res = $("result");
+    if (mode === "convert") {
+      const ext = EXT[label];
+      const original = "IMG_2048." + current;
+      const out = "IMG_2048." + ext;
+      const sheet = $("sheet");
+      sheet.classList.remove("morph"); void sheet.offsetWidth; sheet.classList.add("morph");
+      setTimeout(() => {
+        $("sheet-ext").textContent = "." + ext;
+        $("file-name").textContent = out;
+        $("sheet-body").setAttribute("fill", "var(--signal)");
+        $("sheet-body").setAttribute("stroke", "rgba(0,0,0,.15)");
+        $("sheet-flap").setAttribute("fill", "var(--fold)");
+        $("sheet-ext").style.color = "var(--ink)";
+      }, 220);
+      res.innerHTML = T[lang]["demo.saved"](out, original) + ` <span class="ok">✓</span>`;
+    } else if (mode === "tools") {
+      res.innerHTML = T[lang]["demo.tool"](label);
+    } else {
+      res.innerHTML = T[lang]["demo.action"](label);
+    }
+  }
+
+  function setMode(m) {
+    mode = m; lit = -1;
+    document.querySelectorAll(".key").forEach((k) => k.setAttribute("aria-pressed", String(k.dataset.mode === m)));
+    drawWheel();
+  }
+
+  function renderFormats() {
+    const host = $("format-list");
+    host.textContent = "";
+    FORMATS.forEach(([kind, list]) => {
+      const row = document.createElement("div");
+      row.className = "frow";
+      const h = document.createElement("h3");
+      h.textContent = T[lang].kinds[kind];
+      const chips = document.createElement("div");
+      chips.className = "chips";
+      list.forEach(([ext, helper]) => {
+        const s = document.createElement("span");
+        s.className = "chip" + (helper ? " helper" : "");
+        s.textContent = ext === "unzip" ? (lang === "ar" ? "فك الضغط" : "extract") : "." + ext;
+        chips.appendChild(s);
+      });
+      row.append(h, chips);
+      host.appendChild(row);
+    });
+  }
+
+  function applyLang(l) {
+    lang = l;
+    const root = document.documentElement;
+    root.lang = l;
+    root.dir = l === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach((n) => { const v = T[l][n.dataset.i18n]; if (typeof v === "string") n.textContent = v; });
+    document.querySelectorAll("[data-i18n-html]").forEach((n) => { const v = T[l][n.dataset.i18nHtml]; if (typeof v === "string") n.innerHTML = v; });
+    document.querySelectorAll("[data-i18n-alt]").forEach((n) => { n.alt = T[l][n.dataset.i18nAlt]; });
+    document.querySelectorAll("img[data-src-ar]").forEach((img) => {
+      if (!img.dataset.srcEn) img.dataset.srcEn = img.getAttribute("src");
+      img.src = l === "ar" ? img.dataset.srcAr : img.dataset.srcEn;
+    });
+    $("lang-en").setAttribute("aria-pressed", String(l === "en"));
+    $("lang-ar").setAttribute("aria-pressed", String(l === "ar"));
+    $("result").textContent = T[l]["demo.hint"];
+    lit = -1;
+    drawWheel();
+    renderFormats();
+    try { localStorage.setItem("bremorph-lang", l); } catch (e) {}
+  }
+
+  document.querySelectorAll(".key").forEach((k) => k.addEventListener("click", () => setMode(k.dataset.mode)));
+  $("lang-en").addEventListener("click", () => applyLang("en"));
+  $("lang-ar").addEventListener("click", () => applyLang("ar"));
+
+  // The real keys switch wheels too, like in the app.
+  window.addEventListener("keydown", (e) => {
+    if (e.target.closest && e.target.closest("input, textarea")) return;
+    if (e.key === "Shift") setMode("convert");
+    else if (e.key === "Meta") setMode("tools");
+    else if (e.key === "Control") setMode("actions");
+  });
+
+  $("copy-build").addEventListener("click", () => {
+    const text = "git clone https://github.com/Moha-Bremoo/Bremorph.git\ncd Bremorph\n./build.command";
+    const btn = $("copy-build");
+    const done = () => { btn.textContent = T[lang]["get.copied"]; setTimeout(() => (btn.textContent = T[lang]["get.copy"]), 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, () => selectCode());
+    } else selectCode();
+  });
+  function selectCode() {
+    const range = document.createRange();
+    range.selectNodeContents($("build-code"));
+    const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  }
+
+  // #ar or #en in the link wins, then the visitor's last choice, then the browser language.
+  let saved = null;
+  try { saved = localStorage.getItem("bremorph-lang"); } catch (e) {}
+  let start = "en";
+  if (location.hash === "#ar" || location.hash === "#en") start = location.hash.slice(1);
+  else if (saved === "ar" || saved === "en") start = saved;
+  else if ((navigator.language || "").toLowerCase().startsWith("ar")) start = "ar";
+  applyLang(start);
+})();
+</script>
+</body>
+</html>

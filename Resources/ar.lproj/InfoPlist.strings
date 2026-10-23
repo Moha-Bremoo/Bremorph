@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "Bremorph";
+"NSHumanReadableCopyright" = "© 2026 Mohammed Bremoo";
+"NSAppleEventsUsageDescription" = "يقرأ Bremorph الملفات المحددة في Finder (لاختصار العجلة)، ويطلب من Pages أو Keynote أو Numbers تحويل مستنداتها.";

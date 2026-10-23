@@ -1,0 +1,13 @@
+# Build output
+build/
+*.app
+
+# Logs from the helper scripts
+*.log
+
+# Local sample files used while testing
+Test Files/
+CLI Tests/
+
+# macOS
+.DS_Store

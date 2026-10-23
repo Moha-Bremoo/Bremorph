@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key><string>en</string>
+    <key>CFBundleLocalizations</key><array><string>en</string><string>ar</string></array>
+    <key>CFBundleExecutable</key><string>Bremorph</string>
+    <key>CFBundleIdentifier</key><string>com.mohammedbremoo.bremorph</string>
+    <key>CFBundleName</key><string>Bremorph</string>
+    <key>CFBundleDisplayName</key><string>Bremorph</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>1.0</string>
+    <key>NSHumanReadableCopyright</key><string>© 2026 Mohammed Bremoo</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>LSMinimumSystemVersion</key><string>13.0</string>
+    <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSAppleEventsUsageDescription</key><string>Bremorph reads which files are selected in Finder (for the wheel shortcut) and asks Pages, Keynote or Numbers to convert their documents.</string>
+    <key>NSPrincipalClass</key><string>NSApplication</string>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key><string>Any File</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.item</string>
+                <string>public.folder</string>
+            </array>
+        </dict>
+    </array>
+    <key>NSServices</key>
+    <array>
+        <dict>
+            <key>NSMenuItem</key>
+            <dict><key>default</key><string>Convert with Bremorph</string></dict>
+            <key>NSMessage</key><string>convertFiles</string>
+            <key>NSPortName</key><string>Bremorph</string>
+            <key>NSRequiredContext</key><dict/>
+            <key>NSSendFileTypes</key>
+            <array><string>public.item</string></array>
+        </dict>
+        <dict>
+            <key>NSMenuItem</key>
+            <dict><key>default</key><string>Crop &amp; Edit with Bremorph</string></dict>
+            <key>NSMessage</key><string>cropFiles</string>
+            <key>NSPortName</key><string>Bremorph</string>
+            <key>NSRequiredContext</key><dict/>
+            <key>NSSendFileTypes</key>
+            <array><string>public.image</string></array>
+        </dict>
+    </array>
+</dict>
+</plist>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%d files</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لا ملفات</string>
+			<key>one</key>
+			<string>ملف واحد</string>
+			<key>two</key>
+			<string>ملفان</string>
+			<key>few</key>
+			<string>%d ملفات</string>
+			<key>many</key>
+			<string>%d ملفًا</string>
+			<key>other</key>
+			<string>%d ملف</string>
+		</dict>
+	</dict>
+	<key>%d pages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لا صفحات</string>
+			<key>one</key>
+			<string>صفحة واحدة</string>
+			<key>two</key>
+			<string>صفحتان</string>
+			<key>few</key>
+			<string>%d صفحات</string>
+			<key>many</key>
+			<string>%d صفحة</string>
+			<key>other</key>
+			<string>%d صفحة</string>
+		</dict>
+	</dict>
+	<key>Applies to %d files.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لا ملفات مناسبة.</string>
+			<key>one</key>
+			<string>يُطبَّق على ملف واحد.</string>
+			<key>two</key>
+			<string>يُطبَّق على ملفين.</string>
+			<key>few</key>
+			<string>يُطبَّق على %d ملفات.</string>
+			<key>many</key>
+			<string>يُطبَّق على %d ملفًا.</string>
+			<key>other</key>
+			<string>يُطبَّق على %d ملف.</string>
+		</dict>
+	</dict>
+	<key>Combines %d files into one.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لا ملفات للدمج.</string>
+			<key>one</key>
+			<string>يدمج ملفًا واحدًا.</string>
+			<key>two</key>
+			<string>يدمج ملفين في ملف واحد.</string>
+			<key>few</key>
+			<string>يدمج %d ملفات في ملف واحد.</string>
+			<key>many</key>
+			<string>يدمج %d ملفًا في ملف واحد.</string>
+			<key>other</key>
+			<string>يدمج %d ملف في ملف واحد.</string>
+		</dict>
+	</dict>
+	<key>combines %d files into one</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لا ملفات للدمج</string>
+			<key>one</key>
+			<string>يدمج ملفًا واحدًا</string>
+			<key>two</key>
+			<string>يدمج ملفين في ملف واحد</string>
+			<key>few</key>
+			<string>يدمج %d ملفات في ملف واحد</string>
+			<key>many</key>
+			<string>يدمج %d ملفًا في ملف واحد</string>
+			<key>other</key>
+			<string>يدمج %d ملف في ملف واحد</string>
+		</dict>
+	</dict>
+	<key>Add at least %d files for this</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>أضف ملفات أولًا</string>
+			<key>one</key>
+			<string>أضف ملفًا واحدًا على الأقل</string>
+			<key>two</key>
+			<string>أضف ملفين على الأقل</string>
+			<key>few</key>
+			<string>أضف %d ملفات على الأقل</string>
+			<key>many</key>
+			<string>أضف %d ملفًا على الأقل</string>
+			<key>other</key>
+			<string>أضف %d ملف على الأقل</string>
+		</dict>
+	</dict>
+	<key>Move %d items to…</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>نقل إلى…</string>
+			<key>one</key>
+			<string>نقل عنصر واحد إلى…</string>
+			<key>two</key>
+			<string>نقل عنصرين إلى…</string>
+			<key>few</key>
+			<string>نقل %d عناصر إلى…</string>
+			<key>many</key>
+			<string>نقل %d عنصرًا إلى…</string>
+			<key>other</key>
+			<string>نقل %d عنصر إلى…</string>
+		</dict>
+	</dict>
+	<key>Moved %d items to %@.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@n@ %2$@.</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لم يُنقل أي عنصر إلى</string>
+			<key>one</key>
+			<string>تم نقل عنصر واحد إلى</string>
+			<key>two</key>
+			<string>تم نقل عنصرين إلى</string>
+			<key>few</key>
+			<string>تم نقل %d عناصر إلى</string>
+			<key>many</key>
+			<string>تم نقل %d عنصرًا إلى</string>
+			<key>other</key>
+			<string>تم نقل %d عنصر إلى</string>
+		</dict>
+	</dict>
+	<key>No pages match “%@” (this PDF has %d pages)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>لا توجد صفحات تطابق «%1$@» (%2$#@n@)</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لا صفحات في هذا الملف</string>
+			<key>one</key>
+			<string>في هذا الملف صفحة واحدة</string>
+			<key>two</key>
+			<string>في هذا الملف صفحتان</string>
+			<key>few</key>
+			<string>في هذا الملف %d صفحات</string>
+			<key>many</key>
+			<string>في هذا الملف %d صفحة</string>
+			<key>other</key>
+			<string>في هذا الملف %d صفحة</string>
+		</dict>
+	</dict>
+	<key>Copied %d files. Paste them anywhere in Finder.</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@n@</string>
+		<key>n</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>لم يُنسخ أي ملف.</string>
+			<key>one</key>
+			<string>تم نسخ ملف واحد. الصقه في أي مكان في Finder.</string>
+			<key>two</key>
+			<string>تم نسخ ملفين. الصقهما في أي مكان في Finder.</string>
+			<key>few</key>
+			<string>تم نسخ %d ملفات. الصقها في أي مكان في Finder.</string>
+			<key>many</key>
+			<string>تم نسخ %d ملفًا. الصقها في أي مكان في Finder.</string>
+			<key>other</key>
+			<string>تم نسخ %d ملف. الصقها في أي مكان في Finder.</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

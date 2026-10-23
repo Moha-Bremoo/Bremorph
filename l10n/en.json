@@ -1,0 +1,55 @@
+{
+  "plurals": {
+    "%d files": {
+      "format": "%#@n@",
+      "one": "%d file",
+      "other": "%d files"
+    },
+    "%d pages": {
+      "format": "%#@n@",
+      "one": "%d page",
+      "other": "%d pages"
+    },
+    "Applies to %d files.": {
+      "format": "%#@n@",
+      "one": "Applies to %d file.",
+      "other": "Applies to %d files."
+    },
+    "Combines %d files into one.": {
+      "format": "%#@n@",
+      "one": "Combines %d file into one.",
+      "other": "Combines %d files into one."
+    },
+    "combines %d files into one": {
+      "format": "%#@n@",
+      "one": "combines %d file into one",
+      "other": "combines %d files into one"
+    },
+    "Add at least %d files for this": {
+      "format": "%#@n@",
+      "one": "Add at least %d file for this",
+      "other": "Add at least %d files for this"
+    },
+    "Move %d items to…": {
+      "format": "%#@n@",
+      "one": "Move %d item to…",
+      "other": "Move %d items to…"
+    },
+    "Moved %d items to %@.": {
+      "format": "Moved %1$#@n@ to %2$@.",
+      "one": "%d item",
+      "other": "%d items"
+    },
+    "No pages match “%@” (this PDF has %d pages)": {
+      "format": "No pages match “%1$@” (this PDF has %2$#@n@)",
+      "one": "%d page",
+      "other": "%d pages"
+    },
+    "Copied %d files. Paste them anywhere in Finder.": {
+      "format": "%#@n@",
+      "one": "Copied %d file. Paste it anywhere in Finder.",
+      "other": "Copied %d files. Paste them anywhere in Finder."
+    }
+  },
+  "strings": {}
+}
