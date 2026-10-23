@@ -79,7 +79,13 @@ Bremorph يحوّل ملفاتك ويضغطها ويعدّلها من داخل F
 
 ## التثبيت
 
-تحتاج إلى macOS 13 Ventura أو أحدث، وإلى أدوات سطر الأوامر من Apple (`xcode-select --install`). لا تحتاج إلى Xcode نفسه.
+**[حمّل Bremorph.dmg](https://github.com/Moha-Bremoo/Bremorph/releases/latest/download/Bremorph.dmg)**، افتحه، واسحب Bremorph إلى مجلد التطبيقات. يحتاج macOS 13 Ventura أو أحدث، ويشتغل على أجهزة Apple silicon وIntel.
+
+التطبيق غير موثّق من Apple حاليًا، فأول مرة تفتحه يقول لك macOS إنه لا يقدر يتحقق منه. افتح إعدادات النظام ← الخصوصية والأمان واضغط «فتح على أي حال». تسويها مرة وحدة بس.
+
+### البناء من الكود
+
+تحتاج أدوات سطر الأوامر من Apple (`xcode-select --install`). لا تحتاج إلى Xcode نفسه.
 
 </div>
 
@@ -91,7 +97,7 @@ cd Bremorph
 
 <div dir="rtl">
 
-يجمّع السكربت التطبيق ويثبّته في `~/Applications/Bremorph.app` ثم يفتحه. على macOS 26 تستخدم اللوحات العائمة تصميم Liquid Glass، وعلى الإصدارات الأقدم تستخدم المواد الشفافة المعتادة في النظام.
+يجمّع السكربت التطبيق ويثبّته في `~/Applications/Bremorph.app` ثم يفتحه. والأمر `./build.command --universal` يبنيه لأجهزة Apple silicon وIntel معًا، وبعده `./make-dmg.command` يحطه في ملف `build/Bremorph.dmg`. على macOS 26 تستخدم اللوحات العائمة تصميم Liquid Glass، وعلى الإصدارات الأقدم تستخدم المواد الشفافة المعتادة في النظام.
 
 ### أدوات مساعدة اختيارية
 

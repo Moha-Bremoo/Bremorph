@@ -12,6 +12,7 @@
 <meta property="og:url" content="https://moha-bremoo.github.io/Bremorph/about.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@M_Bremoo">
 <meta name="twitter:image" content="https://moha-bremoo.github.io/Bremorph/images/banner.png">
 <link rel="icon" href="images/icon.png">
 <link rel="apple-touch-icon" href="images/icon.png">
@@ -251,6 +252,15 @@ html[lang="ar"] .link-card .k { font-family: var(--arabic); font-size: 13px; let
 .link-card h3 { font-size: 1.15rem; }
 .link-card p { color: var(--muted); font-size: 14.5px; }
 .link-card .url { font: 400 12.5px/1.4 var(--mono); color: var(--faint); direction: ltr; unicode-bidi: isolate; word-break: break-all; }
+.socials { display: flex; flex-wrap: wrap; gap: 10px; }
+.socials .btn svg { width: 15px; height: 15px; }
+.link-card .k { display: inline-flex; align-items: center; gap: 7px; }
+.link-card .k svg { width: 14px; height: 14px; }
+.handle-h { direction: ltr; unicode-bidi: isolate; }
+html[dir="rtl"] .handle-h { text-align: right; }
+.links-grid + .links-grid { margin-top: 16px; }
+.links-grid.two-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 900px) { .links-grid.two-up { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 900px) { .two, .links-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 620px) { .about-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 48px; } .portrait { width: 120px; height: 120px; } .spec div { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
 </style>
@@ -285,8 +295,12 @@ html[lang="ar"] .link-card .k { font-family: var(--arabic); font-size: 13px; let
     <div class="copy">
       <p class="eyebrow" data-i18n="about.eyebrow">About the maker</p>
       <h1 data-i18n="about.name">Mohammed Bremoo</h1>
-      <p class="handle">@Moha-Bremoo</p>
       <p class="lede" data-i18n="about.lede">I made Bremorph, a free Mac app that converts, compresses and edits files right from Finder.</p>
+      <div class="socials">
+        <a class="btn small" href="https://x.com/M_Bremoo" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.18h1.7L7.41 4.73H5.59l11.08 14.45Z"/></svg><span class="handle">@M_Bremoo</span></a>
+        <a class="btn small" href="https://www.linkedin.com/in/mohammed-bremoo/" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.83v1.54h.06c.53-1 1.84-2.06 3.8-2.06 4.06 0 4.81 2.67 4.81 6.14V21h-4v-4.93c0-1.18-.02-2.69-1.64-2.69-1.64 0-1.89 1.28-1.89 2.6V21h-4V9.75Z"/></svg><span>LinkedIn</span></a>
+        <a class="btn small" href="https://github.com/Moha-Bremoo" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg><span class="handle">Moha-Bremoo</span></a>
+      </div>
     </div>
   </div>
 
@@ -319,12 +333,26 @@ html[lang="ar"] .link-card .k { font-family: var(--arabic); font-size: 13px; let
         <h2 data-i18n="about.find.h">Say hi, report a bug, or send an idea.</h2>
       </div>
       <div class="links-grid">
-        <a class="link-card" href="https://github.com/Moha-Bremoo">
-          <span class="k">GitHub</span>
-          <h3 data-i18n="link.profile">My profile</h3>
+        <a class="link-card" href="https://x.com/M_Bremoo" rel="me">
+          <span class="k"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.18h1.7L7.41 4.73H5.59l11.08 14.45Z"/></svg>X</span>
+          <h3 class="handle-h">@M_Bremoo</h3>
+          <p data-i18n="link.x.p">Updates on Bremorph and what I'm building next.</p>
+          <span class="url">x.com/M_Bremoo</span>
+        </a>
+        <a class="link-card" href="https://www.linkedin.com/in/mohammed-bremoo/" rel="me">
+          <span class="k"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.83v1.54h.06c.53-1 1.84-2.06 3.8-2.06 4.06 0 4.81 2.67 4.81 6.14V21h-4v-4.93c0-1.18-.02-2.69-1.64-2.69-1.64 0-1.89 1.28-1.89 2.6V21h-4V9.75Z"/></svg>LinkedIn</span>
+          <h3 data-i18n="about.name">Mohammed Bremoo</h3>
+          <p data-i18n="link.in.p">My work and background. Happy to connect.</p>
+          <span class="url">linkedin.com/in/mohammed-bremoo</span>
+        </a>
+        <a class="link-card" href="https://github.com/Moha-Bremoo" rel="me">
+          <span class="k"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>GitHub</span>
+          <h3 class="handle-h">Moha-Bremoo</h3>
           <p data-i18n="link.profile.p">Other projects and what I'm working on.</p>
           <span class="url">github.com/Moha-Bremoo</span>
         </a>
+      </div>
+      <div class="links-grid two-up">
         <a class="link-card" href="https://github.com/Moha-Bremoo/Bremorph">
           <span class="k" data-i18n="link.code.k">Source</span>
           <h3 data-i18n="link.code">Bremorph on GitHub</h3>
@@ -347,6 +375,8 @@ html[lang="ar"] .link-card .k { font-family: var(--arabic); font-size: 13px; let
     <p data-i18n="foot.by">Made by Mohammed Bremoo. MIT license.</p>
     <nav aria-label="Links">
       <a href="index.html" data-i18n="nav.home">Bremorph</a>
+      <a href="https://x.com/M_Bremoo">X</a>
+      <a href="https://www.linkedin.com/in/mohammed-bremoo/">LinkedIn</a>
       <a href="https://github.com/Moha-Bremoo/Bremorph">GitHub</a>
       <a href="https://github.com/Moha-Bremoo/Bremorph/releases" data-i18n="foot.releases">Releases</a>
       <a href="https://github.com/Moha-Bremoo/Bremorph/issues" data-i18n="foot.issues">Report a problem</a>
@@ -370,6 +400,7 @@ html[lang="ar"] .link-card .k { font-family: var(--arabic); font-size: 13px; let
       "spec.lang": "Languages", "spec.lang.v": "English, Arabic", "spec.license": "License", "spec.version": "Version",
       "about.find.k": "Find me", "about.find.h": "Say hi, report a bug, or send an idea.",
       "link.profile": "My profile", "link.profile.p": "Other projects and what I'm working on.",
+      "link.x.p": "Updates on Bremorph and what I'm building next.", "link.in.p": "My work and background. Happy to connect.",
       "link.code.k": "Source", "link.code": "Bremorph on GitHub", "link.code.p": "Read the code, star the repo, or send a pull request.",
       "link.issue.k": "Feedback", "link.issue": "Open an issue", "link.issue.p": "Found a bug or missing a format? Tell me there.",
       "foot.by": "Made by Mohammed Bremoo. MIT license.", "foot.releases": "Releases", "foot.issues": "Report a problem"
@@ -387,6 +418,7 @@ html[lang="ar"] .link-card .k { font-family: var(--arabic); font-size: 13px; let
       "spec.lang": "اللغات", "spec.lang.v": "العربي، الإنجليزي", "spec.license": "الرخصة", "spec.version": "الإصدار",
       "about.find.k": "تواصل معي", "about.find.h": "سلّم، بلّغ عن مشكلة، أو أرسل فكرة.",
       "link.profile": "حسابي", "link.profile.p": "مشاريعي الثانية واللي أشتغل عليه الحين.",
+      "link.x.p": "أخبار Bremorph واللي أشتغل عليه بعده.", "link.in.p": "شغلي وخبرتي. يسعدني نتواصل.",
       "link.code.k": "الكود", "link.code": "Bremorph على GitHub", "link.code.p": "اقرأ الكود، حط نجمة للمشروع، أو أرسل تعديل.",
       "link.issue.k": "ملاحظات", "link.issue": "افتح Issue", "link.issue.p": "لقيت مشكلة أو تبي صيغة ناقصة؟ قل لي هناك.",
       "foot.by": "صنعه محمد بريمو. رخصة MIT.", "foot.releases": "الإصدارات", "foot.issues": "بلّغ عن مشكلة"

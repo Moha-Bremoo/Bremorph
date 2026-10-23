@@ -1,6 +1,7 @@
 #!/bin/bash
 # Builds Bremorph.app from source and installs it into ~/Applications.
 # Usage: ./build.command   (or double-click it in Finder)
+#        ./build.command --universal   (Apple silicon + Intel, for releases)
 cd "$(dirname "$0")" || exit 1
 exec > >(tee build.log) 2>&1
 echo "=== Bremorph build $(date) ==="
@@ -17,12 +18,22 @@ APP="build/Bremorph.app"
 rm -rf build
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
-echo "--- compiling"
-swiftc -O -parse-as-library \
-  -target "$(uname -m)-apple-macos13.0" \
-  -sdk "$(xcrun --show-sdk-path)" \
-  Sources/*.swift \
-  -o "$APP/Contents/MacOS/Bremorph" || { echo "BUILD_FAILED"; exit 1; }
+# ./build.command --universal builds for both Apple silicon and Intel (used for releases).
+ARCHS="$(uname -m)"
+[ "${1:-}" = "--universal" ] && ARCHS="arm64 x86_64"
+
+echo "--- compiling for $ARCHS"
+SLICES=()
+for A in $ARCHS; do
+  swiftc -O -parse-as-library \
+    -target "$A-apple-macos13.0" \
+    -sdk "$(xcrun --show-sdk-path)" \
+    Sources/*.swift \
+    -o "build/Bremorph-$A" || { echo "BUILD_FAILED ($A)"; exit 1; }
+  SLICES+=("build/Bremorph-$A")
+done
+lipo -create "${SLICES[@]}" -output "$APP/Contents/MacOS/Bremorph" || { echo "BUILD_FAILED (lipo)"; exit 1; }
+lipo -info "$APP/Contents/MacOS/Bremorph"
 
 cp Info.plist "$APP/Contents/Info.plist"
 iconutil -c icns AppIcon.iconset -o "$APP/Contents/Resources/AppIcon.icns"

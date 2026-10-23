@@ -77,7 +77,13 @@ The metadata editor shows and edits title, artist or author, description, copyri
 
 ## Install
 
-You need macOS 13 Ventura or later and Apple's Command Line Tools (`xcode-select --install`). You don't need Xcode itself.
+**[Download Bremorph.dmg](https://github.com/Moha-Bremoo/Bremorph/releases/latest/download/Bremorph.dmg)**, open it, and drag Bremorph into Applications. It needs macOS 13 Ventura or later and runs on Apple silicon and Intel Macs.
+
+The app isn't notarized by Apple yet, so the first time you open it macOS says it can't check it. Go to System Settings → Privacy & Security and click Open Anyway. You only do this once.
+
+### Build from source
+
+You need Apple's Command Line Tools (`xcode-select --install`). You don't need Xcode itself.
 
 ```bash
 git clone https://github.com/Moha-Bremoo/Bremorph.git
@@ -85,7 +91,7 @@ cd Bremorph
 ./build.command          # or double-click build.command in Finder
 ```
 
-The script compiles the app, installs it in `~/Applications/Bremorph.app` and opens it. On macOS 26 the floating panels use Liquid Glass, and older versions use the standard translucent materials.
+The script compiles the app, installs it in `~/Applications/Bremorph.app` and opens it. `./build.command --universal` builds for both Apple silicon and Intel, and `./make-dmg.command` then packs that app into `build/Bremorph.dmg`. On macOS 26 the floating panels use Liquid Glass, and older versions use the standard translucent materials.
 
 ### Optional helpers
 
